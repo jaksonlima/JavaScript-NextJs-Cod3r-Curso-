@@ -1,18 +1,21 @@
 import { useCallback, useEffect, useState } from "react"
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import Head from "next/head"
+import Image from 'next/image'
 
+import ueImage from '../../../../public/ue.gif'
+import refreshImage from '../../../../public/iconmonstr-refresh-5.svg'
 import styles from '../../../styles/Jogo.module.css'
 import Porta from "../../../components/Porta"
 import { atualizarPortas, criarPortas } from "../../../functions/portas"
-import Head from "next/head"
 
 export default function Jogo() {
   const [portas, setPortas] = useState([])
   const { query } = useRouter()
 
   function getRandomArbitrary(min, max) {
-    return Math.random() * Math.random() * (max - min) + min;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
   const hashPresente = (length) => {
@@ -72,12 +75,20 @@ export default function Jogo() {
           {validatePortaAndPresente() ?
             renderizarPortas() :
             <div>
-              <img src="/ue.webp" alt="esta-vazio" />
+              <Image src={ueImage} alt="ue" />
             </div>}
         </div>
         <div className={`${styles.refresh} hover-brightness`}>
-          <Link href="/">
-            <img src="/iconmonstr-refresh-5.svg" alt="refreshed" className="refresh-animation" />
+          <Link href="/" passHref>
+            <div
+              className="refresh-animation"
+              style={{
+                width: '24px',
+                height: '24px'
+              }}
+            >
+              <Image src={refreshImage} alt="refrest" />
+            </div>
           </Link>
         </div>
       </div>
