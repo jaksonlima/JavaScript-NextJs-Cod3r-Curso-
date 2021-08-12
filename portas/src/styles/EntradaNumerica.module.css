@@ -1,0 +1,38 @@
+.entradaNumerica {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.text {
+  color: var(--color-principal);
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.value {
+  font-size: 5rem;
+  color: var(--color-principal);
+  box-shadow: 0 4px 2px -2px rgba(128, 128, 128, 13%);
+  margin: 4px;
+}
+
+.botoes {
+  display: flex;
+}
+
+.bt {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  height: 60px;
+  width: 60px;
+  margin: 5px;
+  border: 1.9px solid rgba(188, 140, 255, 0.4);
+  border-radius: 6px;
+  color: #a371f7;
+  background-color: rgba(188, 140, 255, 0.1);
+}

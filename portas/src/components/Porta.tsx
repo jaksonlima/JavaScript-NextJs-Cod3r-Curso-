@@ -1,6 +1,7 @@
 import styles from '../styles/Porta.module.css'
 
 import PortaModel from '../model/portaModel'
+import Presente from './Presente'
 
 interface PortaProps {
   value: PortaModel,
@@ -8,7 +9,7 @@ interface PortaProps {
 }
 
 function Porta({ value, onChange } : PortaProps) {
-  const { selecionada, numero, aberta } = value
+  const { selecionada, numero, aberta, temPresente  } = value
 
   const alterarSelecao = (env) => onChange(value.alternarSelecao())
 
@@ -19,8 +20,17 @@ function Porta({ value, onChange } : PortaProps) {
 
   return  (
     <div className={styles.area} onClick={alterarSelecao}>
-      <div className={`${styles.estrutura} ${selecionada && !aberta && styles.selecionada}`}>
-        {aberta ? false : (
+      <div 
+      className={`
+      ${styles.estrutura} 
+      ${styles.estruturabackground} 
+      ${temPresente && aberta && styles.compresente}
+      ${!temPresente && aberta && styles.sempresente}
+      ${selecionada && !aberta && styles.selecionada}
+      `}>
+        {aberta ? (<>
+          {!temPresente ? false : (<Presente />)}
+        </>) : (
             <div className={styles.porta}>
                 <div className={styles.numero}>{numero}</div>
                 <div className={styles.macaneta} onClick={abrir}></div>

@@ -1,0 +1,73 @@
+#jogo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.portas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-self: stretch;
+}
+
+.botoes {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.botoes button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(252, 237, 161, 0.2);
+  border: 1px solid  rgba(255, 229, 143, 1);
+  color: rgba(212, 136, 6, 1);
+  font-size: 2rem;
+  padding: 10px 25px;
+  border-radius: 6px;
+}
+
+.botoes button img {
+  margin-left: 18px;
+}
+
+.refresh {
+  display: flex;
+  background-color: rgba(252, 237, 161, 0.2);
+  border: 1px solid  rgba(255, 229, 143, 1);
+  color: rgba(212, 136, 6, 1);
+  padding: 15px 20px;
+  border-radius: 6px;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+}
+
+.refresh:hover:after {
+  content: "Reiniciar o jogo";
+  position: fixed;
+  top: 0px;
+  left: 80px;
+  width: max-content;
+  min-height: 24px;
+  padding: 6px 8px;
+  color: rgba(221, 215, 215, 0.815);
+  text-align: left;
+  text-decoration: none;
+  word-wrap: break-word;
+  background-color: #000000bf;
+  border-radius: 2px;
+  box-shadow: 0 3px 6px -4px #0000001f, 0 6px 16px #00000014, 0 9px 28px 8px #0000000d;
+}
+
+@media only screen and (max-width: 1600px) {
+  #jogo {
+    height: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}

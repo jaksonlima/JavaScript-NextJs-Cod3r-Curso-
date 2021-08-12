@@ -5,7 +5,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   background-color: rgb(49, 49, 49);
-  color: white;
+  color: rgba(255, 255, 255, 0.774);
 }
 
 a {
@@ -17,7 +17,47 @@ a {
   box-sizing: border-box;
 }
 
+.hover-brightness:hover  {
+  filter: brightness(140%);
+}
+
+.refresh-animation:hover {
+	-webkit-animation: rotate-scale-up 0.9s linear reverse both;
+	        animation: rotate-scale-up 0.9s linear reverse both;
+}
+
+@-webkit-keyframes rotate-scale-up {
+  0% {
+    -webkit-transform: scale(1) rotateZ(0);
+            transform: scale(1) rotateZ(0);
+  }
+  50% {
+    -webkit-transform: scale(2) rotateZ(180deg);
+            transform: scale(2) rotateZ(180deg);
+  }
+  100% {
+    -webkit-transform: scale(1) rotateZ(360deg);
+            transform: scale(1) rotateZ(360deg);
+  }
+}
+@keyframes rotate-scale-up {
+  0% {
+    -webkit-transform: scale(1) rotateZ(0);
+            transform: scale(1) rotateZ(0);
+  }
+  50% {
+    -webkit-transform: scale(2) rotateZ(180deg);
+            transform: scale(2) rotateZ(180deg);
+  }
+  100% {
+    -webkit-transform: scale(1) rotateZ(360deg);
+            transform: scale(1) rotateZ(360deg);
+  }
+}
+
+
 :root {
   --area-port-largura: 200px;
   --area-port-altura: 310px;
+  --color-principal: rgba(88, 166, 255, 1);
 }
