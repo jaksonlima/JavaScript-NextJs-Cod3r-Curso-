@@ -19,6 +19,7 @@ export async function getStaticProps({ params: { id } }) {
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   const reponse = await fetch(`http://localhost:3000/api/alunos/${id}`)
   const data = await reponse.json()
+
   return {
     revalidate: 10,
     props: {
