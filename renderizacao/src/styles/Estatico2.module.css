@@ -1,0 +1,13 @@
+.container {
+  height: 100vh;
+  color: rgb(255, 255, 255);
+  background-image: url("/nextjs-cover.jpg");
+  /* background-color: rgba(40, 42, 54, 1); */
+  background-position: center;
+  /* background-repeat: no-repeat; */
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
