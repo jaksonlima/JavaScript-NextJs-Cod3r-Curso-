@@ -30,6 +30,10 @@ export default class QuestaoModel {
     return this.#acertou
   }
 
+  get naoRespondida() {
+    return !this.respondida
+  }
+
   get respondida() {
     const existsRevelada = this.#respostas
       .some(resposta => true === resposta.revelada)
