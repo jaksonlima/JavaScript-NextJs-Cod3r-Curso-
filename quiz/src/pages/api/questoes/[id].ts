@@ -10,7 +10,7 @@ export default async function (req: NextApiRequest, res) {
 
   if (questao) {
     res.status(200)
-      .json(questao.randomResposta().responderCom(0).converterObject())
+      .json(questao.randomResposta().converterObject())
   } else {
     res.status(204).send()
   }

@@ -58,6 +58,11 @@ export default class QuestaoModel {
     return new QuestaoModel(this.#id, this.#enunciado, randomRespostas, this.#acertou);
   }
 
+  static criarUsandoObject(obj: QuestaoModel): QuestaoModel {
+    const respostas = obj.respostas.map(resposta => RespostaModel.criarUsandoObject(resposta))
+    return new QuestaoModel(obj.id, obj.enunciado, respostas, obj.acertou);
+  }
+
   converterObject() {
     return {
       id: this.#id,

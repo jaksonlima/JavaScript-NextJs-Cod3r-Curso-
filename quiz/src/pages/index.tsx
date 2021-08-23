@@ -25,11 +25,10 @@ export default function Home() {
     setIdQuestionarios(idsQuestionario)
   }
 
-  const handleQuestao = async (id: number) => {
-    const response = await fetch(`${BASE_URL}/questoes/${id}`)
-    const ids = await response.json()
-
-    console.log(ids)
+  const handleQuestao = async (idQuestao: number) => {
+    const response = await fetch(`${BASE_URL}/questoes/${idQuestao}`)
+    const questoes = await response.json()
+    setQuestao(QuestaoModel.criarUsandoObject(questoes))
   }
 
   useEffect(() => {
