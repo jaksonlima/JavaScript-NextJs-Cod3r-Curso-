@@ -1,35 +1,17 @@
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
 import Questionario from '../components/Questionario'
 import QuestaoModel from '../model/questao'
-import RespostaModel from '../model/resposta'
-
-const questaoMock = new QuestaoModel(1, 'Qual é a melhor cor?', [
-  RespostaModel.errada('Verde'),
-  RespostaModel.errada('Vermelho'),
-  RespostaModel.errada('Azul'),
-  RespostaModel.certa('Preta'),
-])
 
 const BASE_URL = "http://localhost:3000/api"
 
 export default function Home() {
+  const router = useRouter()
   const [idQuestionarios, setIdQuestionarios] = useState<number[]>([])
-  const [questao, setQuestao] = useState<QuestaoModel>(questaoMock)
-
-  const handleIdsQuestionario = async () => {
-    const response = await fetch(`${BASE_URL}/questionario`)
-    const idsQuestionario = await response.json()
-
-    setIdQuestionarios(idsQuestionario)
-  }
-
-  const handleQuestao = async (idQuestao: number) => {
-    const response = await fetch(`${BASE_URL}/questoes/${idQuestao}`)
-    const questoes = await response.json()
-    setQuestao(QuestaoModel.criarUsandoObject(questoes))
-  }
+  const [questao, setQuestao] = useState<QuestaoModel>()
+  const [respostaCerta, setRespostaCerta] = useState<number>(0)
 
   useEffect(() => {
     handleIdsQuestionario()
@@ -39,10 +21,46 @@ export default function Home() {
     idQuestionarios.length > 0 && handleQuestao(idQuestionarios[0])
   }, [idQuestionarios])
 
-  function questaoRespondida(questao: QuestaoModel) {
+  const handleIdsQuestionario = async () => {
+    const response = await fetch(`${BASE_URL}/questionario`)
+    const idsQuestionario: number[] = await response.json()
+    setIdQuestionarios(idsQuestionario)
+  }
+
+  const handleQuestao = async (idQuestao: number) => {
+    const response = await fetch(`${BASE_URL}/questoes/${idQuestao}`)
+    const questoes = await response.json()
+    setQuestao(QuestaoModel.criarUsandoObject(questoes))
+  }
+
+  function questaoRespondida(questaoRespondida: QuestaoModel) {
+    setQuestao(questaoRespondida);
+    const acertou = questaoRespondida.acertou
+    setRespostaCerta(respostaCerta + (acertou ? 1 : 0))
+  }
+
+  function irParaProximaPergunta() {
+    const proximoIndex = idQuestionarios.indexOf(questao?.id) + 1
+    return idQuestionarios[proximoIndex]
   }
 
   function irParaProximaQuestao() {
+    const proximoId = irParaProximaPergunta()
+    proximoId ? irProximaQuestao(proximoId) : finalizar()
+  }
+
+  function irProximaQuestao(proximoId: number) {
+    handleQuestao(proximoId)
+  }
+
+  function finalizar() {
+    router.push({
+      pathname: "/resultado",
+      query: {
+        total: idQuestionarios.length,
+        certas: respostaCerta
+      }
+    })
   }
 
   return (
@@ -55,7 +73,7 @@ export default function Home() {
 
       <Questionario
         questao={questao}
-        ultimo={false}
+        ultimo={irParaProximaPergunta() === undefined}
         questaoRespondida={questaoRespondida}
         irParaProximoPasso={irParaProximaQuestao}
       />

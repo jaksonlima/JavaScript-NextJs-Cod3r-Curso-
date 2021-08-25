@@ -24,7 +24,7 @@ function Questionario(props: QuestionarioProps) {
       {props.questao ? (
         <Questao
           valor={props.questao}
-          tempoDaResposta={15}
+          tempoDaResposta={6}
           onChange={respostaFornecida}
           tempoEsgotado={props.irParaProximoPasso}
         />

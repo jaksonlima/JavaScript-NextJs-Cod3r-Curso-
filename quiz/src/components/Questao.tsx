@@ -24,7 +24,7 @@ function Questao({ valor, tempoDaResposta, onChange, tempoEsgotado }: QuestaoPro
   function handleRespostas() {
     return valor.respostas.map((item, index) => (
       <Resposta
-        key={index}
+        key={`${valor.id} ${index}`}
         valor={item}
         indece={index}
         letra={letras[index].valor}
@@ -37,7 +37,11 @@ function Questao({ valor, tempoDaResposta, onChange, tempoEsgotado }: QuestaoPro
   return (
     <div className={styles.questao}>
       <Enunciado texto={valor.enunciado} />
-      <Temporizador duracao={tempoDaResposta ?? 10} tempoEsgotado={tempoEsgotado} />
+      <Temporizador
+        duracao={tempoDaResposta ?? 10}
+        tempoEsgotado={tempoEsgotado}
+        key={valor.id}
+      />
       {handleRespostas()}
     </div>
   )

@@ -5,6 +5,7 @@ import styles from '../styles/Temporizador.module.css'
 interface TemporizadorProps {
   children?: any
   duracao: number
+  key: any
   tempoEsgotado: () => void
 }
 
