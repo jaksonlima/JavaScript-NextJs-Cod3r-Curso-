@@ -1,14 +1,17 @@
 import router from 'next/router'
 
-import { IconAdJustments, IconBell, IconExit, IconHome } from "../Icons";
+import useAuthContext from '../../data/hook/useAuthContext';
 import Logo from "./Logo";
 import MenuItem from "./MenuItem";
+import { IconAdJustments, IconBell, IconExit, IconHome } from "../Icons";
 
 interface MenuLateralProps {
   children?: any
 }
 
 function MenuLateral(props: MenuLateralProps) {
+  const { logout } = useAuthContext()
+
   return (
     <aside className={`
     flex flex-col 
@@ -35,9 +38,7 @@ function MenuLateral(props: MenuLateralProps) {
             text-red-600 dark:text-red-400
             hover:bg-red-400 hover:text-white dark:hover:text-white
           `}
-          onClick={(props) => {
-            router.push('/autenticacao')
-          }}
+          onClick={logout}
         />
       </ul>
     </aside>

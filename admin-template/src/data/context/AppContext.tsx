@@ -1,6 +1,19 @@
-import { createContext, useState } from "react"
+import { createContext, useEffect, useState } from "react"
 
-export type Theme = 'dark' | 'light'
+export enum Theme {
+  TYPE = 'theme',
+  DARK = 'dark',
+  LIGT = 'light'
+}
+
+function findThemeToValue(theme: string): Theme {
+  for (let themeKey of Object.keys(Theme)) {
+    const themeEnum: Theme = Theme[themeKey]
+    if (themeEnum === theme) {
+      return theme;
+    }
+  }
+}
 
 interface ContextProps {
   theme?: Theme,
@@ -10,10 +23,20 @@ interface ContextProps {
 const AppContext = createContext<ContextProps>({})
 
 export function AppProvider(props) {
-  const [theme, setTheme] = useState<Theme>('dark')
+  const [theme, setTheme] = useState<Theme>(Theme.DARK)
+
+  useEffect(() => {
+    let themeCookie = localStorage.getItem(Theme.TYPE)
+
+    if (themeCookie) {
+      setTheme(findThemeToValue(themeCookie))
+    }
+  }, [])
 
   function onChangeTheme() {
-    setTheme(theme == 'dark' ? 'light' : 'dark')
+    const findTheme = theme === Theme.DARK ? Theme.LIGT : Theme.DARK
+    localStorage.setItem(Theme.TYPE, findTheme)
+    setTheme(findTheme)
   }
 
   return (

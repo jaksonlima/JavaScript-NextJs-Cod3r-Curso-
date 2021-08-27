@@ -1,8 +1,13 @@
+import { createContext, useEffect, useState } from "react"
 import router from 'next/router'
-import { createContext, useState } from "react"
+import Cookies from 'js-cookie'
 
 import firebase from '../../firebase/config'
 import Usuario from '../../model/Usuario'
+
+export enum TypeCookieAuth {
+  LABEL_COOKIE_AUTH = 'admin-template-auth'
+}
 
 interface AuthProviderProps {
   children: any
@@ -10,7 +15,11 @@ interface AuthProviderProps {
 
 interface ContextProps {
   usuario?: Usuario
+  load?: boolean
+  login?: (email: string, senha: string) => Promise<void>
+  cadastrar?: (email: string, senha: string) => Promise<void>
   loginGoogle?: () => Promise<void>
+  logout?: () => Promise<void>
 }
 
 const AuthContext = createContext<ContextProps>({})
@@ -27,18 +36,95 @@ async function normalizerUserFireBase(userFirebase: firebase.User): Promise<Usua
   };
 }
 
+function generatedCookie(isLogin: boolean) {
+  if (isLogin) {
+    Cookies.set(TypeCookieAuth.LABEL_COOKIE_AUTH, `${isLogin}`, {
+      expires: 7
+    })
+  } else {
+    Cookies.remove(TypeCookieAuth.LABEL_COOKIE_AUTH)
+  }
+}
+
 export function AuthProvider({ children }: AuthProviderProps) {
   const [usuario, setUsuario] = useState<Usuario>(null)
+  const [load, setLoad] = useState<boolean>(true)
+
+  useEffect(() => {
+    if (Cookies.get(TypeCookieAuth.LABEL_COOKIE_AUTH)) {
+      const cancel = firebase.auth().onIdTokenChanged(sessionUser)
+      return cancel
+    } else {
+      setLoad(false)
+    }
+  }, [])
+
+
+  async function logout() {
+    try {
+      setLoad(true)
+      await firebase.auth().signOut()
+      await sessionUser(null)
+    } finally {
+      setLoad(false)
+      router.push('/autenticacao')
+    }
+  }
+
+  async function sessionUser(userFirebase: firebase.User) {
+    try {
+      if (userFirebase?.email) {
+        const user = await normalizerUserFireBase(userFirebase)
+        setUsuario(user)
+        generatedCookie(true)
+        return userFirebase?.email
+      } else {
+        setUsuario(null)
+        generatedCookie(false)
+        return false
+      }
+    } finally {
+      setLoad(false)
+    }
+  }
 
   async function loginGoogle() {
-    const response = await firebase.auth().signInWithPopup(
-      new firebase.auth.GoogleAuthProvider()
-    )
-    if (response.user?.email) {
-      const user = await normalizerUserFireBase(response.user)
-      console.log(user)
-      setUsuario(user)
+    try {
+      setLoad(true)
+      const response = await firebase.auth().signInWithPopup(
+        new firebase.auth.GoogleAuthProvider()
+      )
+
+      await sessionUser(response.user)
       router.push('/')
+    } finally {
+      setLoad(false)
+    }
+  }
+
+  async function login(email: string, senha: string) {
+    try {
+      setLoad(true)
+      const response = await firebase.auth()
+        .signInWithEmailAndPassword(email, senha)
+
+      await sessionUser(response.user)
+      router.push('/')
+    } finally {
+      setLoad(false)
+    }
+  }
+
+  async function cadastrar(email: string, senha: string) {
+    try {
+      setLoad(true)
+      const response = await firebase.auth()
+        .createUserWithEmailAndPassword(email, senha)
+
+      await sessionUser(response.user)
+      router.push('/')
+    } finally {
+      setLoad(false)
     }
   }
 
@@ -46,7 +132,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     <AuthContext.Provider
       value={{
         usuario,
-        loginGoogle
+        load,
+        login,
+        loginGoogle,
+        cadastrar,
+        logout,
       }}
     >
       {children}

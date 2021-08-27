@@ -12,18 +12,20 @@ export type AuthMode = 'login' | 'cadastro'
 
 function Autenticacao(props: AutenticacaoProps) {
   const [modo, setModo] = useState<AuthMode>('login')
-  const [email, setEmail] = useState()
-  const [senha, setSenha] = useState()
+  const [email, setEmail] = useState('')
+  const [senha, setSenha] = useState('')
   const [erro, setErro] = useState(null)
-  const { usuario, loginGoogle } = useAuthContext()
+  const { login, cadastrar, loginGoogle } = useAuthContext()
 
-  function submit() {
-    if (modo === 'login') {
-      console.log('login')
-      exibirErro('Ocorreu um erro no Login')
-    } else {
-      console.log('Cadastrar')
-      exibirErro('Ocorreu um erro no Cadastro')
+  async function submit() {
+    try {
+      if (modo === 'login') {
+        await login(email, senha)
+      } else {
+        await cadastrar(email, senha)
+      }
+    } catch (error) {
+      exibirErro(error.message ?? 'Erro inesperado')
     }
   }
 
@@ -64,10 +66,10 @@ function Autenticacao(props: AutenticacaoProps) {
             {IconWarn()}
             <span className={`ml-3`}>{erro}</span>
           </div>
-        )
-          : <Fragment />}
+        ) : <Fragment />}
 
         <AuthInput
+          placeholder="Entre com seu e-mail favorito"
           type="email"
           label="Email"
           valor={email}
@@ -75,6 +77,7 @@ function Autenticacao(props: AutenticacaoProps) {
           onChange={setEmail}
         />
         <AuthInput
+          placeholder="Senha"
           type="password"
           label="Senha"
           valor={senha}
