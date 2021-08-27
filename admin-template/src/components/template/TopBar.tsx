@@ -1,3 +1,6 @@
+import useAppContext from "../../data/hook/useAppContext";
+import AvatarUser from "./AvatarUser";
+import BottomChangeTheme from "./BottomChangeTheme";
 import Title from "./Title";
 
 interface TopBarProps {
@@ -7,10 +10,15 @@ interface TopBarProps {
 }
 
 function TopBar(props: TopBarProps) {
+  const { theme, onChangeTheme } = useAppContext()
+
   return (
-    <div>
+    <div className={`flex`}>
       <Title title={props.title} subtitle={props.subtitle} />
-      TopBar
+      <div className={`flex flex-grow justify-end items-center`}>
+        <BottomChangeTheme theme={theme} onChangeTheme={onChangeTheme} />
+        <AvatarUser className={`ml-3`} />
+      </div>
     </div>
   )
 }
