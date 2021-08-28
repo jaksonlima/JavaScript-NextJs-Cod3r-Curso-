@@ -37,7 +37,7 @@ function AuthInput(props: AuthInputProps) {
       />
       {props?.type === 'password' && (
         <div className={`absolute right-2 bottom-2  text-gray-500`}>
-          <button onClick={handlePassword}>
+          <button onClick={handlePassword} className={`focus:outline-none`}>
             {type === 'text' ? IconEve(5) : IconEveOff(5)}
           </button>
         </div>
